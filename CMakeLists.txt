@@ -8,7 +8,7 @@
 ###### Project Environment #####
 
 # Set minimum CMake version
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.22)
 
 # Set the compiler (must be prior to project setup)
 include(./cmake/stm32f4.cmake)
