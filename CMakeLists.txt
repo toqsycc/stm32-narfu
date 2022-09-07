@@ -48,11 +48,11 @@ include(${PROJECT_SOURCE_DIR}/cmake/stm32-base.cmake)
 ##### Files #####
 
 # Include directories
-include_directories(${PROJECT_SOURCE_DIR}/source)
+include_directories(${PROJECT_SOURCE_DIR}/user)
 
 # Source files
 set(PROJECT_SOURCES
-    source/main.cpp
+    user/main.cpp
 )
 
 ##### Outputs #####
