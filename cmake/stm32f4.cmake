@@ -1,43 +1,30 @@
-FIND_FILE(RISCV_NONE_EMBED_COMPILER_EXE "riscv-none-embed-gcc.exe" PATHS ENV INCLUDE)
-FIND_FILE(RISCV_NONE_EMBED_COMPILER "riscv-none-embed-gcc" PATHS ENV INCLUDE)
+#ARM none eabi gcc toolchain configuration
 
-if (EXISTS ${RISCV_NONE_EMBED_COMPILER_EXE})
-	set(RISCV_GCC_COMPILER ${RISCV_NONE_EMBED_COMPILER_EXE})
-elseif (EXISTS ${RISCV_NONE_EMBED_COMPILER})
-	set(RISCV_GCC_COMPILER ${RISCV_NONE_EMBED_COMPILER})
-else()
-	message(FATAL_ERROR "RISC-V GCC not found.")
-endif()
+# We are cross compiling so we don't want compiler tests to run, as they will fail
+include(CMakeForceCompiler)
 
-get_filename_component(RISCV_TOOLCHAIN_BIN_PATH ${RISCV_GCC_COMPILER} DIRECTORY)
-get_filename_component(RISCV_TOOLCHAIN_BIN_GCC ${RISCV_GCC_COMPILER} NAME_WE)
-get_filename_component(RISCV_TOOLCHAIN_BIN_EXT ${RISCV_GCC_COMPILER} EXT)
+# Indicate we aren't compiling for an OS
+set(CMAKE_SYSTEM_NAME Generic)
 
-STRING(REGEX REPLACE "\-gcc" "-" CROSS_COMPILE ${RISCV_TOOLCHAIN_BIN_GCC})
+# Set processor type
+set(CMAKE_SYSTEM_PROCESSOR arm)
 
-set(CMAKE_SYSTEM_NAME 		  Generic)
-set(CMAKE_SYSTEM_PROCESSOR 	CH32V307)
-set(CMAKE_EXECUTABLE_SUFFIX ".elf")
+# Override compiler
+SET(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
+set(CMAKE_C_COMPILER arm-none-eabi-gcc)
+set(CMAKE_CXX_COMPILER arm-none-eabi-g++)
 
-set(CMAKE_ASM_COMPILER ${CROSS_COMPILE}gcc)
-set(CMAKE_AR ${CROSS_COMPILE}ar)
-set(CMAKE_C_COMPILER ${CROSS_COMPILE}gcc)
-set(CMAKE_CXX_COMPILER ${CROSS_COMPILE}g++)
+# Set other tools
+set(OBJSIZE ${COMPILER_PREFIX}arm-none-eabi-size)
+set(OBJCOPY ${COMPILER_PREFIX}arm-none-eabi-objcopy)
+set(OBJDUMP ${COMPILER_PREFIX}arm-none-eabi-objdump)
+set(DEBUGGER ${COMPILER_PREFIX}arm-none-eabi-gdb)
 
-set(CMAKE_OBJCOPY ${RISCV_TOOLCHAIN_BIN_PATH}/${CROSS_COMPILE}objcopy
-	CACHE FILEPATH "Toolchain objcopy cmd" FORCE)
-set(CMAKE_OBJDUMP ${RISCV_TOOLCHAIN_BIN_PATH}/${CROSS_COMPILE}objdump
-	CACHE FILEPATH "Toolchain objdump cmd" FORCE)
-	
-set(CMAKE_C_FLAGS_INIT "-march=rv32imac -mabi=ilp32 -mcmodel=medany -mtune=rocket")
-set(CMAKE_CXX_FLAGS_INIT "${CMAKE_C_FLAGS}")
-set(CMAKE_ASM_FLAGS "${CMAKE_C_FLAGS}")
-set(CMAKE_EXE_LINKER_FLAGS_INIT "-march=rv32imac -nostartfiles")
-set(CMAKE_C_FLAGS_RELEASE "-Os -DNDEBUG")
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}")
-set(CMAKE_ASM_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}")
-set(CMAKE_C_FLAGS_DEBUG "-Og -g")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_C_FLAGS_RELEASE}")
-set(CMAKE_ASM_FLAGS_DEBUG "${CMAKE_C_FLAGS_RELEASE}")
+# Remove preset linker flags
+set(CMAKE_SHARED_LIBRARY_LINK_C_FLAGS "") 
+set(CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS "") 
+set(CMAKE_SHARED_LIBRARY_LINK_ASM_FLAGS "")
 
-
+# Set library options
+set(SHARED_LIBS OFF)
+set(STATIC_LIBS ON)
