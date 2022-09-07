@@ -1,9 +1,13 @@
 # HAL cmake inclusion file
 # Adds HAL library to the build
 
+message("Configuring HAL...")
+
 if(USE_HAL)
 
 set(HAL_LOCATION ${CMAKE_CURRENT_LIST_DIR}/${CPU_FAMILY_U}xx_HAL_Driver)
+
+message("HAL directory: ${HAL_LOCATION}")
 
 # Add the hal headers
 include_directories(${HAL_LOCATION}/Inc)
