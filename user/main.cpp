@@ -27,13 +27,13 @@ int main()
 	for(;;) 
 	{ 
 		HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12);
-		delayMs(10);
+		delayMs(40);
 		HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_13);
-		delayMs(10);
+		delayMs(40);
 		HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_14);
-		delayMs(10);
+		delayMs(40);
 		HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_15);
-		delayMs(10);
+		delayMs(40);
 	}
 
 	return 0;
